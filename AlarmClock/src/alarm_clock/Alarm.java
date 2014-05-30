@@ -10,13 +10,13 @@ public class Alarm {
 	AudioClip alarm_sound;
 	boolean isPlaying;
 	
-	public Alarm(int v1,int v2,int v3) {
+	public Alarm(int v1,int v2) {
 		
 		c = Calendar.getInstance();
 		
 		c.set(c.HOUR   , v1);
 		c.set(c.MINUTE , v2);
-		c.set(c.SECOND , v3);
+		c.set(c.SECOND , 0);
 		alarm_sound = Applet.newAudioClip(this.getClass().getResource("/Sound/alarm.wav"));
 		isPlaying = false;
 	}
