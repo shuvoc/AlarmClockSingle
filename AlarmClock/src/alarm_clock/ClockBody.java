@@ -2,6 +2,8 @@ package alarm_clock;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -9,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 
 import javax.swing.*;
@@ -16,6 +20,7 @@ import javax.swing.*;
 public class ClockBody extends JPanel{
 	
 	private Image backImg ;
+	private Image alarmSign;
 	private MyButton btn_close;
 	private MyButton btn_minimize;
 	private GlassButton btn_set_alarm;
@@ -23,6 +28,7 @@ public class ClockBody extends JPanel{
 	private MyLabel  lbl_hour;
 	private MyLabel  lbl_min;
 	private MyLabel  lbl_sec;
+	private MyLabel  lbl_ampm;
 	private MyTextField tf_hour;
 	private MyTextField tf_min;
 	private Calendar cal;
@@ -36,6 +42,9 @@ public class ClockBody extends JPanel{
 		try {
 			ImageIcon ii = new ImageIcon(getClass().getResource("/Image/back_clock.png"));
 			backImg = ii.getImage();
+			
+			ii = new ImageIcon(getClass().getResource("/Image/alarm_sign.png"));
+			alarmSign = ii.getImage();
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -47,6 +56,7 @@ public class ClockBody extends JPanel{
 		lbl_hour = new MyLabel("00",102,90,60,60);
 		lbl_min  = new MyLabel("00",192,90,60,60);
 		lbl_sec  = new MyLabel("00",282,90,60,60);
+		lbl_ampm  = new MyLabel("AM",368,110,30,40);
 		tf_hour  = new MyTextField(42,6,25,21);
 		tf_min   = new MyTextField(72,6,25,21);
 		
@@ -59,12 +69,14 @@ public class ClockBody extends JPanel{
 		this.add(lbl_hour);
 		this.add(lbl_min);
 		this.add(lbl_sec);
+		this.add(lbl_ampm);
 		this.add(tf_hour);
 		this.add(tf_min);
 		
 		
 		
 		
+		lbl_ampm.setFont(lbl_ampm.getFont().deriveFont(22.0f));
 		btn_stop_alarm.setVisible(false);
 		
 		
@@ -80,6 +92,9 @@ public class ClockBody extends JPanel{
 		
 		if((cal.get(cal.SECOND)/10) != 0)lbl_sec.setText(""+cal.get(cal.SECOND));
 		else lbl_sec.setText("0"+cal.get(cal.SECOND));
+		
+		if(cal.get(cal.AM_PM)==1)lbl_ampm.setText("PM");
+		else lbl_ampm.setText("AM");
 		
 		
         Timer t = new Timer(1000, taskPerformer);
@@ -108,6 +123,9 @@ public class ClockBody extends JPanel{
     		
     		if((cal.get(cal.SECOND)/10) != 0)lbl_sec.setText(""+cal.get(cal.SECOND));
     		else lbl_sec.setText("0"+cal.get(cal.SECOND));
+    		
+    		if(cal.get(cal.AM_PM)==1)lbl_ampm.setText("PM");
+    		else lbl_ampm.setText("AM");
         }
     };
     
@@ -117,6 +135,7 @@ public class ClockBody extends JPanel{
 	    @Override
 	    public void mousePressed(MouseEvent e) {
 	    	
+	    	if(isSetAlarm)return;
 	    	try{
 	    		alarm = new Alarm( Integer.parseInt(tf_hour.getText()), Integer.parseInt(tf_min.getText()) );
 	    		isSetAlarm = true;
@@ -164,6 +183,8 @@ public class ClockBody extends JPanel{
 	public void paint(Graphics g){
 		super.paint(g);
 		g.drawImage(backImg, 30,40, backImg.getWidth(null),backImg.getHeight(null),this);
+		
+		if(this.isSetAlarm)g.drawImage(alarmSign, 320, 6, alarmSign.getWidth(null),alarmSign.getHeight(null), this);
 		
 		repaint();
 	}

@@ -18,6 +18,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
+import java.util.regex.*;
 
 public class MyTextField extends JTextField{
 
@@ -61,7 +62,7 @@ public class MyTextField extends JTextField{
         @Override
         public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
             if (str == null) return;
-            if ((getLength() + str.length()) <= 2 ) {
+            if ((getLength() + str.length()) <= 2 && (Pattern.matches("^\\d*$", str)) ) {
                 super.insertString(offset, str, attr);
             }
             

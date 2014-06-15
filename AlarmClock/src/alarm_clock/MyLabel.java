@@ -20,7 +20,7 @@ public class MyLabel extends JLabel{
 		this.setSize(width,height);
 		
 		this.setHorizontalAlignment( SwingConstants.CENTER );
-		this.setForeground(Color.WHITE);
+		this.setForeground(Color.YELLOW);
 		
 		
 		/*
